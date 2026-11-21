@@ -19,6 +19,84 @@
 
     * { box-sizing: border-box; }
 
+.camara-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  padding: 16px 18px max(20px, env(safe-area-inset-bottom));
+  background: #f4f5ef;
+  display: flex;
+  flex-direction: column;
+}
+
+.camara-modal.oculto {
+  display: none !important;
+}
+
+.camara-etapa {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  border-radius: 28px;
+  background: #20221e;
+}
+
+.camara-etapa video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.camara-ovalo {
+  position: absolute;
+  left: 50%;
+  top: 48%;
+  width: 66%;
+  height: 70%;
+  transform: translate(-50%, -50%);
+  border: 4px solid white;
+  border-radius: 50%;
+  box-shadow: 0 0 0 999px #0006;
+  pointer-events: none;
+}
+
+.camara-etapa p {
+  position: absolute;
+  bottom: 8px;
+  width: 100%;
+  color: white;
+  text-align: center;
+  font-size: 15px;
+}
+
+.camara-controles {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 22px 8px 4px;
+}
+
+.camara-controles button {
+  width: 60px;
+  height: 60px;
+  border: 1px solid #dfe4dc;
+  border-radius: 50%;
+  background: white;
+  color: var(--oliva-oscuro);
+  font-size: 30px;
+  cursor: pointer;
+}
+
+.camara-controles #capturarFoto {
+  width: 76px;
+  height: 76px;
+  border: 8px solid #e3ede0;
+  background: var(--oliva);
+  color: white;
+  font-size: 32px;
+}
+
     body {
       margin: 0;
       background: var(--fondo);
@@ -320,6 +398,23 @@
     }
   </style>
 </head>
+
+<div id="camaraModal" class="camara-modal oculto">
+  <div class="camara-etapa">
+    <video id="videoCamara" autoplay playsinline></video>
+    <div class="camara-ovalo"></div>
+    <p>Ubicá tu rostro dentro del óvalo</p>
+  </div>
+
+  <div class="camara-controles">
+    <button id="cerrarCamara" type="button" aria-label="Volver">‹</button>
+    <button id="capturarFoto" type="button" aria-label="Tomar foto">●</button>
+    <button id="girarCamara" type="button" aria-label="Cambiar cámara">⟳</button>
+  </div>
+
+  <canvas id="canvasCaptura" class="oculto"></canvas>
+</div>
+
 <body>
   <header class="contenedor">
     <div class="marca">
@@ -349,14 +444,9 @@
         cuidados y tratamientos de YCR Estética.
       </p>
 
-      <button id="sacarFoto" class="boton boton-principal" type="button">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M4 7h3l2-3h6l2 3h3a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2Z"/>
-          <circle cx="12" cy="13" r="4"/>
-        </svg>
-        Sacar una foto
-      </button>
+<button id="sacarFoto" class="boton boton-principal" type="button">
+  Sacar una foto
+</button>
 
       <button id="subirFoto" class="boton boton-secundario" type="button">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -442,7 +532,70 @@
   </main>
 
   <script>
-    const camara = document.getElementById("camara");
+  
+;
+  const camaraModal = document.getElementById("camaraModal");
+const videoCamara = document.getElementById("videoCamara");
+const canvasCaptura = document.getElementById("canvasCaptura");
+
+let flujoCamara = null;
+let camaraFrontal = true;
+
+async function abrirCamara() {
+  try {
+    flujoCamara = await navigator.mediaDevices.getUserMedia({
+      audio: false,
+      video: { facingMode: camaraFrontal ? "user" : "environment" }
+    });
+
+    videoCamara.srcObject = flujoCamara;
+    camaraModal.classList.remove("oculto");
+  } catch (error) {
+    mostrarEstado("No se pudo abrir la cámara. Revisá el permiso o elegí una foto de la galería.", true);
+  }
+}
+
+function cerrarCamara() {
+  if (flujoCamara) {
+    flujoCamara.getTracks().forEach((track) => track.stop());
+    flujoCamara = null;
+  }
+  videoCamara.srcObject = null;
+  camaraModal.classList.add("oculto");
+}
+
+document.getElementById("sacarFoto").addEventListener("click", abrirCamara);
+document.getElementById("cerrarCamara").addEventListener("click", cerrarCamara);
+
+document.getElementById("girarCamara").addEventListener("click", async () => {
+  camaraFrontal = !camaraFrontal;
+  cerrarCamara();
+  await abrirCamara();
+});
+
+document.getElementById("capturarFoto").addEventListener("click", () => {
+  if (!videoCamara.videoWidth) return;
+
+  canvasCaptura.width = videoCamara.videoWidth;
+  canvasCaptura.height = videoCamara.videoHeight;
+
+  const contextoCanvas = canvasCaptura.getContext("2d");
+  contextoCanvas.drawImage(videoCamara, 0, 0);
+
+  canvasCaptura.toBlob((blob) => {
+    if (!blob) {
+      mostrarEstado("No se pudo tomar la foto. Probá nuevamente.", true);
+      return;
+    }
+
+    const fotoTomada = new File([blob], "foto-ycr.jpg", {
+      type: "image/jpeg"
+    });
+
+    cerrarCamara();
+    prepararFoto(fotoTomada);
+  }, "image/jpeg", 0.92);
+});
     const galeria = document.getElementById("galeria");
     const vistaPrevia = document.getElementById("vistaPrevia");
     const descripcionBox = document.getElementById("descripcionBox");
