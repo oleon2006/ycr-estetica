@@ -3,383 +3,625 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#68745a">
-  <title>YCR Estética | Tu piel, en una foto</title>
+  <meta name="theme-color" content="#78816b">
+  <title>Tu piel, en una foto | YCR Estética</title>
   <style>
     :root {
-      --oliva: #68745a;
-      --oliva-oscuro: #46513c;
-      --crema: #f7f4ed;
-      --blanco: #fffefa;
-      --texto: #302f2a;
-      --suave: #716f67;
-      --borde: #e6e1d5;
+      --fondo: #f4f5ef;
+      --blanco: #fff;
+      --oliva: #78816b;
+      --oliva-oscuro: #535e49;
+      --oliva-claro: #eaf0e3;
+      --texto: #30332e;
+      --gris: #73776f;
+      --borde: #e3e7df;
     }
 
     * { box-sizing: border-box; }
 
     body {
       margin: 0;
-      background: var(--crema);
+      background: var(--fondo);
       color: var(--texto);
       font-family: Arial, Helvetica, sans-serif;
-      line-height: 1.55;
+      line-height: 1.5;
     }
 
-    header {
-      background: var(--blanco);
-      border-bottom: 1px solid var(--borde);
+    .contenedor {
+      width: min(100% - 28px, 450px);
+      margin: 0 auto;
     }
 
-    .barra {
-      width: min(100% - 32px, 980px);
-      margin: auto;
-      min-height: 76px;
+    header { padding: 20px 0 22px; }
+
+    .marca {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 12px;
     }
 
     .logo {
-      width: 54px;
-      height: 54px;
-      object-fit: contain;
+      width: 48px;
+      height: 48px;
       border-radius: 50%;
+      object-fit: contain;
+      background: var(--blanco);
     }
 
-    .marca { font-weight: 700; }
-    .submarca { color: var(--suave); font-size: .9rem; }
-
-    main {
-      width: min(100% - 32px, 760px);
-      margin: 38px auto 64px;
+    .nombre-marca {
+      font: italic 27px Georgia, serif;
+      color: var(--oliva-oscuro);
+      line-height: 1;
     }
 
-    .intro { text-align: center; margin-bottom: 26px; }
-    .intro h1 { margin: 0 0 8px; font-size: clamp(1.8rem, 5vw, 2.5rem); }
-    .intro p { margin: 0; color: var(--suave); }
+    .lema {
+      margin-top: 5px;
+      color: var(--gris);
+      font-size: 10px;
+      letter-spacing: 2.3px;
+      text-transform: uppercase;
+    }
 
     .tarjeta {
       background: var(--blanco);
-      border: 1px solid var(--borde);
-      border-radius: 18px;
-      padding: clamp(18px, 4vw, 30px);
-      box-shadow: 0 8px 28px #40351a0c;
-      margin-bottom: 20px;
+      border-radius: 25px;
+      box-shadow: 0 12px 30px #29351d0c;
     }
 
-    h2 { margin: 0 0 14px; font-size: 1.2rem; }
-    label { display: block; font-weight: 600; margin: 14px 0 7px; }
-    .ayuda { color: var(--suave); font-size: .92rem; margin: 0 0 10px; }
-
-    input[type="file"], textarea {
-      width: 100%;
-      border: 1px solid var(--borde);
-      border-radius: 10px;
-      padding: 12px;
-      background: white;
-      color: var(--texto);
-      font: inherit;
+    .principal {
+      padding: 30px 22px 24px;
+      text-align: center;
     }
 
-    textarea { min-height: 105px; resize: vertical; }
+    .icono-rostro {
+      display: grid;
+      place-items: center;
+      width: 100px;
+      height: 100px;
+      margin: 0 auto 17px;
+      border: 2px dashed #98a58d;
+      border-radius: 50%;
+      background: #f1f5ed;
+      color: var(--oliva);
+    }
 
-    .consentimiento {
+    .icono-rostro svg { width: 48px; height: 48px; }
+
+    h1 {
+      margin: 0 0 9px;
+      font: 600 27px Georgia, "Times New Roman", serif;
+    }
+
+    .intro {
+      margin: 0 auto 21px;
+      color: var(--gris);
+      max-width: 365px;
+      font-size: 15px;
+    }
+
+    .boton {
       display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      margin: 18px 0;
-      font-size: .92rem;
-      color: var(--suave);
-    }
-
-    .consentimiento input { margin-top: 5px; }
-
-    button, .boton {
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      width: 100%;
+      min-height: 52px;
       border: 0;
-      border-radius: 10px;
-      padding: 12px 18px;
-      background: var(--oliva);
-      color: white;
-      cursor: pointer;
+      border-radius: 15px;
+      padding: 12px 16px;
       font: inherit;
       font-weight: 700;
       text-decoration: none;
-      display: inline-block;
+      cursor: pointer;
     }
 
-    button:hover, .boton:hover { background: var(--oliva-oscuro); }
-    button:disabled { opacity: .6; cursor: wait; }
+    .boton svg { width: 19px; height: 19px; }
 
-    .estado { margin: 14px 0 0; color: var(--suave); }
-    .error { color: #a23b32; }
-    .demo { color: #765b18; font-weight: 700; }
-
-    .resultado h2 { margin-top: 22px; }
-    .resultado h2:first-child { margin-top: 0; }
-    .resultado ul, .resultado ol { padding-left: 22px; }
-    .item {
-      border-left: 3px solid #c8cdbd;
-      padding: 4px 0 4px 12px;
-      margin: 10px 0;
+    .boton-principal {
+      margin-top: 10px;
+      background: var(--oliva);
+      color: white;
+      box-shadow: 0 5px 12px #53604935;
     }
 
-    .etiqueta {
-      display: inline-block;
-      margin: 4px 0;
-      padding: 3px 9px;
+    .boton-principal:hover { background: var(--oliva-oscuro); }
+
+    .boton-secundario {
+      margin-top: 10px;
+      border: 1px solid var(--borde);
+      background: white;
+      color: var(--texto);
+    }
+
+    .boton:disabled { opacity: .6; cursor: wait; }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 7px;
+      margin-top: 16px;
+    }
+
+    .chip {
+      padding: 5px 9px;
       border-radius: 20px;
-      background: #eef0e9;
-      color: var(--oliva-oscuro);
-      font-size: .85rem;
+      background: #f3f5f1;
+      color: var(--gris);
+      font-size: 11px;
+      white-space: nowrap;
     }
 
-    .oculto { display: none; }
+    .consejos {
+      margin-top: 16px;
+      padding: 15px 18px;
+      border-radius: 18px;
+      background: var(--oliva-claro);
+    }
 
-    footer {
+    .consejos strong { font-size: 14px; }
+
+    .consejos ul {
+      margin: 7px 0 0;
+      padding-left: 19px;
+      color: #555b50;
+      font-size: 13px;
+    }
+
+    .sin-foto {
+      display: block;
+      width: fit-content;
+      margin: 22px auto;
+      border: 0;
+      background: none;
+      color: var(--gris);
+      font: inherit;
+      font-size: 13px;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    .entrada-texto {
+      margin: 0 0 18px;
+      text-align: left;
+    }
+
+    .entrada-texto label,
+    .consentimiento { font-size: 13px; }
+
+    textarea {
+      display: block;
+      width: 100%;
+      min-height: 100px;
+      margin-top: 7px;
+      border: 1px solid var(--borde);
+      border-radius: 12px;
+      padding: 12px;
+      font: inherit;
+      resize: vertical;
+    }
+
+    .foto-preview {
+      display: none;
+      width: min(100%, 230px);
+      max-height: 260px;
+      margin: 14px auto 0;
+      border-radius: 16px;
+      object-fit: cover;
+    }
+
+    .consentimiento {
+      display: none;
+      align-items: flex-start;
+      gap: 9px;
+      margin: 15px 0 2px;
+      color: var(--gris);
+      text-align: left;
+    }
+
+    .consentimiento input { margin-top: 4px; }
+
+    .estado {
+      min-height: 20px;
+      margin: 12px 0 0;
+      color: var(--gris);
+      font-size: 13px;
+    }
+
+    .error { color: #a43f36; }
+
+    .legal {
+      margin: 22px 4px 30px;
+      color: var(--gris);
       text-align: center;
-      color: var(--suave);
-      font-size: .88rem;
-      padding: 20px;
+      font-size: 11px;
     }
 
-    @media (max-width: 520px) {
-      main { margin-top: 24px; }
-      .barra { min-height: 68px; }
+    .legal p { margin: 8px 0; }
+
+    .legal a { color: var(--oliva-oscuro); }
+
+    .contacto {
+      margin-bottom: 28px;
+      padding: 24px 20px;
+      text-align: center;
+    }
+
+    .logo-pie {
+      width: 62px;
+      height: 62px;
+      margin-bottom: 8px;
+      border-radius: 50%;
+      object-fit: contain;
+    }
+
+    .contacto h2 {
+      margin: 0 0 7px;
+      font: 600 20px Georgia, "Times New Roman", serif;
+    }
+
+    .contacto p {
+      margin: 4px 0;
+      color: var(--gris);
+      font-size: 13px;
+    }
+
+    .contacto .profesion {
+      color: var(--texto);
+      font-weight: 700;
+    }
+
+    .links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 9px;
+      margin-top: 16px;
+    }
+
+    .link-pastilla {
+      padding: 8px 13px;
+      border: 1px solid var(--borde);
+      border-radius: 25px;
+      color: var(--oliva-oscuro);
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .resultados {
+      display: none;
+      margin: 18px 0;
+      padding: 22px;
+    }
+
+    .resultados h2 {
+      margin: 18px 0 7px;
+      font: 600 20px Georgia, serif;
+    }
+
+    .resultados h2:first-child { margin-top: 0; }
+
+    .resultados p { margin: 6px 0; }
+    .resultados ul { padding-left: 20px; }
+    .resultados li { margin: 6px 0; }
+
+    .subtitulo {
+      color: var(--oliva-oscuro);
+      font-weight: 700;
+    }
+
+    .oculto { display: none !important; }
+
+    @media (max-width: 380px) {
+      .principal { padding: 25px 17px 21px; }
+      h1 { font-size: 24px; }
+      .nombre-marca { font-size: 24px; }
     }
   </style>
 </head>
 <body>
-  <header>
-    <div class="barra">
+  <header class="contenedor">
+    <div class="marca">
       <img class="logo" src="/logo-ycr.jpg" alt="Logo de YCR Estética"
            onerror="this.style.display='none'">
       <div>
-        <div class="marca">YCR Estética</div>
-        <div class="submarca">Piel sana</div>
+        <div class="nombre-marca">YCR Estética</div>
+        <div class="lema">Piel sana</div>
       </div>
     </div>
   </header>
 
-  <main>
-    <section class="intro">
-      <h1>Tu piel, en una foto</h1>
-      <p>Recibí una orientación cosmética inicial y personalizada.</p>
-    </section>
+  <main class="contenedor">
+    <section class="tarjeta principal">
+      <div class="icono-rostro" aria-hidden="true">
+        <svg viewBox="0 0 48 48" fill="none" stroke="currentColor"
+             stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M15 8H11a4 4 0 0 0-4 4v4M33 8h4a4 4 0 0 1 4 4v4M7 32v4a4 4 0 0 0 4 4h4M41 32v4a4 4 0 0 1-4 4h-4"/>
+          <circle cx="24" cy="20" r="6"/>
+          <path d="M13 35c1.7-5 5.3-7.5 11-7.5S33.3 30 35 35"/>
+        </svg>
+      </div>
 
-    <section class="tarjeta">
-      <h2>Contanos sobre tu piel</h2>
-      <p class="ayuda">
-        Podés subir una foto clara del rostro o describir tu piel. No hace falta
-        completar las dos opciones.
+      <h1>Tu piel, en una foto</h1>
+      <p class="intro">
+        Sacate una selfie y recibí una lectura orientativa de tu piel con
+        cuidados y tratamientos de YCR Estética.
       </p>
 
-      <label for="foto">Subir una foto</label>
-      <input id="foto" type="file" accept="image/*">
+      <button id="sacarFoto" class="boton boton-principal" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 7h3l2-3h6l2 3h3a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2Z"/>
+          <circle cx="12" cy="13" r="4"/>
+        </svg>
+        Sacar una foto
+      </button>
 
-      <label for="descripcion">O describir tu piel</label>
-      <textarea id="descripcion" maxlength="1200"
-        placeholder="Por ejemplo: siento la piel sensible y noto resequedad en las mejillas..."></textarea>
+      <button id="subirFoto" class="boton boton-secundario" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 16V4m0 0L7 9m5-5 5 5"/>
+          <path d="M5 14v5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-5"/>
+        </svg>
+        Subir una foto de mi galería
+      </button>
 
-      <label for="contexto">¿Qué te gustaría mejorar? (opcional)</label>
-      <textarea id="contexto" maxlength="500"
-        placeholder="Manchas, textura, hidratación, brillo..."></textarea>
+      <input id="camara" class="oculto" type="file" accept="image/*" capture="user">
+      <input id="galeria" class="oculto" type="file" accept="image/*">
 
-      <label class="consentimiento">
+      <img id="vistaPrevia" class="foto-preview" alt="Vista previa de la foto">
+
+      <div id="descripcionBox" class="entrada-texto oculto">
+        <label for="descripcion">Contanos cómo sentís tu piel</label>
+        <textarea id="descripcion" maxlength="1200"
+          placeholder="Por ejemplo: noto resequedad, sensibilidad o manchas..."></textarea>
+      </div>
+
+      <label id="consentimientoBox" class="consentimiento">
         <input id="consentimiento" type="checkbox">
         <span>
-          Acepto que la foto o descripción se envíe a un servicio de inteligencia
-          artificial para generar esta orientación cosmética.
+          Acepto que mi foto o descripción se envíe a Gemini de Google para
+          generar una orientación cosmética.
         </span>
       </label>
 
-      <button id="analizar" type="button">Analizar mi piel</button>
-      <p id="estado" class="estado" aria-live="polite"></p>
+      <button id="analizar" class="boton boton-principal oculto" type="button">
+        Analizar mi piel
+      </button>
+      <button id="cambiar" class="sin-foto oculto" type="button">
+        Elegir otra foto
+      </button>
+
+      <div class="chips">
+        <span class="chip">⏱ Unos segundos</span>
+        <span class="chip">🔒 No se guarda en esta página</span>
+        <span class="chip">✨ Orientación gratuita</span>
+      </div>
     </section>
 
-    <section id="panelResultado" class="tarjeta resultado oculto"
-             aria-live="polite">
-      <div id="resultado"></div>
-      <p><a id="whatsapp" class="boton oculto" target="_blank"
-            rel="noopener">Consultar por WhatsApp</a></p>
+    <section class="consejos">
+      <strong>Para un mejor resultado</strong>
+      <ul>
+        <li>Usá luz natural, de frente a una ventana.</li>
+        <li>Si es posible, sacate la foto sin maquillaje.</li>
+        <li>Incluí el rostro completo y evitá filtros.</li>
+      </ul>
+    </section>
+
+    <button id="contarlo" class="sin-foto" type="button">
+      Prefiero no subir una foto, quiero contarlo
+    </button>
+
+    <p id="estado" class="estado" role="status" aria-live="polite"></p>
+
+    <section id="resultados" class="tarjeta resultados" aria-live="polite"></section>
+
+    <section class="legal">
+      <p>Lectura orientativa y cosmética. No reemplaza una consulta médica o dermatológica.</p>
+      <p>
+        Si elegís una foto, se envía a Gemini de Google para generar el análisis.
+        Esta página no guarda la imagen en una base de datos.
+      </p>
+    </section>
+
+    <section class="tarjeta contacto">
+      <img class="logo-pie" src="/logo-ycr.jpg" alt=""
+           onerror="this.style.display='none'">
+      <h2>Yolyma Rodriguez</h2>
+      <p class="profesion">Dermocosmiatra</p>
+      <p>YCR Estética · Piel Sana</p>
+      <p>Buenos Aires</p>
+      <div class="links">
+        <a class="link-pastilla" href="https://www.instagram.com/ycr.estetica/"
+           target="_blank" rel="noopener">Instagram · @ycr.estetica</a>
+        <a id="whatsapp" class="link-pastilla oculto"
+           target="_blank" rel="noopener">WhatsApp</a>
+      </div>
     </section>
   </main>
 
-  <footer>
-    Orientación cosmética informativa. No reemplaza una consulta dermatológica.
-  </footer>
-
   <script>
-    const foto = document.getElementById("foto");
+    const camara = document.getElementById("camara");
+    const galeria = document.getElementById("galeria");
+    const vistaPrevia = document.getElementById("vistaPrevia");
+    const descripcionBox = document.getElementById("descripcionBox");
     const descripcion = document.getElementById("descripcion");
-    const contexto = document.getElementById("contexto");
+    const consentimientoBox = document.getElementById("consentimientoBox");
     const consentimiento = document.getElementById("consentimiento");
-    const boton = document.getElementById("analizar");
+    const analizar = document.getElementById("analizar");
+    const cambiar = document.getElementById("cambiar");
     const estado = document.getElementById("estado");
-    const panelResultado = document.getElementById("panelResultado");
-    const resultado = document.getElementById("resultado");
-    const linkWhatsApp = document.getElementById("whatsapp");
+    const resultados = document.getElementById("resultados");
+    const whatsapp = document.getElementById("whatsapp");
 
-    function agregarTexto(contenedor, etiqueta, texto, clase) {
-      if (!texto) return;
-      const elemento = document.createElement(etiqueta);
-      elemento.textContent = texto;
-      if (clase) elemento.className = clase;
-      contenedor.appendChild(elemento);
+    let archivoElegido = null;
+    let urlPrevia = null;
+
+    document.getElementById("sacarFoto").addEventListener("click", () => camara.click());
+    document.getElementById("subirFoto").addEventListener("click", () => galeria.click());
+
+    function prepararFoto(archivo) {
+      if (!archivo) return;
+      if (!archivo.type.startsWith("image/")) {
+        mostrarEstado("Elegí un archivo de imagen.", true);
+        return;
+      }
+      if (archivo.size > 8 * 1024 * 1024) {
+        mostrarEstado("La foto supera 8 MB. Elegí una imagen más liviana.", true);
+        return;
+      }
+
+      archivoElegido = archivo;
+      if (urlPrevia) URL.revokeObjectURL(urlPrevia);
+      urlPrevia = URL.createObjectURL(archivo);
+
+      vistaPrevia.src = urlPrevia;
+      vistaPrevia.style.display = "block";
+      descripcionBox.classList.add("oculto");
+      consentimientoBox.style.display = "flex";
+      analizar.classList.remove("oculto");
+      cambiar.classList.remove("oculto");
+      mostrarEstado("");
     }
 
-    function agregarLista(contenedor, titulo, elementos) {
-      if (!Array.isArray(elementos) || elementos.length === 0) return;
+    camara.addEventListener("change", () => prepararFoto(camara.files[0]));
+    galeria.addEventListener("change", () => prepararFoto(galeria.files[0]));
 
-      agregarTexto(contenedor, "h2", titulo);
-      const lista = document.createElement("ul");
+    document.getElementById("contarlo").addEventListener("click", () => {
+      archivoElegido = null;
+      vistaPrevia.style.display = "none";
+      descripcionBox.classList.remove("oculto");
+      consentimientoBox.style.display = "flex";
+      analizar.classList.remove("oculto");
+      cambiar.classList.add("oculto");
+      descripcion.focus();
+    });
 
-      elementos.forEach((dato) => {
+    cambiar.addEventListener("click", () => {
+      archivoElegido = null;
+      camara.value = "";
+      galeria.value = "";
+      vistaPrevia.style.display = "none";
+      consentimientoBox.style.display = "none";
+      analizar.classList.add("oculto");
+      cambiar.classList.add("oculto");
+      mostrarEstado("");
+    });
+
+    function mostrarEstado(mensaje, esError) {
+      estado.textContent = mensaje;
+      estado.classList.toggle("error", Boolean(esError));
+    }
+
+    function agregarTexto(tag, texto, clase) {
+      if (!texto) return;
+      const elemento = document.createElement(tag);
+      elemento.textContent = texto;
+      if (clase) elemento.className = clase;
+      resultados.appendChild(elemento);
+    }
+
+    function agregarLista(titulo, lista) {
+      if (!Array.isArray(lista) || !lista.length) return;
+      agregarTexto("h2", titulo);
+      const ul = document.createElement("ul");
+
+      lista.forEach((dato) => {
         const li = document.createElement("li");
         if (typeof dato === "string") {
           li.textContent = dato;
         } else {
           li.textContent = [
-            dato.nombre,
-            dato.rol ? `(${dato.rol})` : "",
+            dato.titulo || dato.nombre,
+            dato.nivel ? `(${dato.nivel})` : "",
             dato.frecuencia ? `— ${dato.frecuencia}` : "",
             dato.uso ? `— ${dato.uso}` : "",
-            dato.por_que ? `: ${dato.por_que}` : ""
+            dato.detalle || dato.por_que ? `: ${dato.detalle || dato.por_que}` : ""
           ].filter(Boolean).join(" ");
         }
-        lista.appendChild(li);
+        ul.appendChild(li);
       });
 
-      contenedor.appendChild(lista);
+      resultados.appendChild(ul);
     }
 
     function mostrarResultado(datos) {
-      resultado.replaceChildren();
+      resultados.replaceChildren();
+      resultados.style.display = "block";
 
       if (datos.modo_demo) {
-        agregarTexto(resultado, "p", "Resultado de demostración", "demo");
+        agregarTexto("p", "Resultado de demostración", "subtitulo");
       }
 
       if (datos.foto_valida === false) {
-        agregarTexto(resultado, "h2", "No pudimos analizar esa foto");
-        agregarTexto(resultado, "p", datos.motivo_foto_invalida);
+        agregarTexto("h2", "No pudimos analizar esa foto");
+        agregarTexto("p", datos.motivo_foto_invalida);
+      } else {
+        agregarTexto("h2", datos.tipo_piel || "Orientación de tu piel");
+        agregarTexto("p", datos.resumen);
+        agregarTexto("p", datos.tema_principal, "subtitulo");
+        agregarLista("Aspectos positivos", datos.fortalezas);
+        agregarLista("Observaciones", datos.observaciones);
+        agregarLista("Tratamientos sugeridos", datos.tratamientos);
+
+        if (datos.plan) {
+          agregarTexto("h2", "Plan orientativo");
+          agregarTexto("p", datos.plan);
+        }
+
+        if (datos.opcion_premium) {
+          agregarTexto("h2", "Opción intensiva");
+          agregarTexto("p",
+            `${datos.opcion_premium.nombre} — ${datos.opcion_premium.frecuencia}. ${datos.opcion_premium.por_que}`);
+        }
+
+        agregarLista("Productos para casa", datos.productos);
+        agregarLista("Rutina de mañana", datos.rutina_manana);
+        agregarLista("Rutina de noche", datos.rutina_noche);
       }
-
-      agregarTexto(resultado, "h2", datos.tipo_piel);
-      agregarTexto(resultado, "p", datos.resumen);
-      agregarTexto(resultado, "p", datos.tema_principal, "etiqueta");
-
-      agregarLista(resultado, "Aspectos positivos", datos.fortalezas);
-      agregarLista(resultado, "Observaciones", datos.observaciones);
-      agregarLista(resultado, "Tratamientos sugeridos", datos.tratamientos);
-
-      if (datos.plan) {
-        agregarTexto(resultado, "h2", "Plan orientativo");
-        agregarTexto(resultado, "p", datos.plan);
-      }
-
-      if (datos.opcion_premium) {
-        agregarTexto(resultado, "h2", "Opción intensiva");
-        agregarTexto(
-          resultado,
-          "p",
-          `${datos.opcion_premium.nombre} — ${datos.opcion_premium.frecuencia}. ${datos.opcion_premium.por_que}`
-        );
-      }
-
-      agregarLista(resultado, "Productos para la rutina", datos.productos);
-      agregarLista(resultado, "Rutina de mañana", datos.rutina_manana);
-      agregarLista(resultado, "Rutina de noche", datos.rutina_noche);
 
       if (datos.consulta_medica) {
-        agregarTexto(resultado, "h2", "Consulta profesional");
-        agregarTexto(resultado, "p", datos.consulta_medica);
+        agregarTexto("h2", "Consulta profesional");
+        agregarTexto("p", datos.consulta_medica);
       }
 
-      panelResultado.classList.remove("oculto");
-      panelResultado.scrollIntoView({ behavior: "smooth", block: "start" });
+      resultados.scrollIntoView({ behavior: "smooth", block: "start" });
     }
 
-    function leerImagen(archivo) {
+    function leerBase64(archivo) {
       return new Promise((resolve, reject) => {
         const lector = new FileReader();
-        lector.onload = () => {
-          const dataUrl = lector.result;
-          resolve(dataUrl.split(",")[1]);
-        };
-        lector.onerror = () => reject(new Error("No se pudo leer la foto."));
+        lector.onload = () => resolve(String(lector.result).split(",")[1]);
+        lector.onerror = () => reject(new Error("No se pudo leer la imagen."));
         lector.readAsDataURL(archivo);
       });
     }
 
-    async function registrarEvento(tipo) {
-      try {
-        await fetch("/api/event", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ tipo, origen: "web" })
-        });
-      } catch (_) {}
-    }
-
-    async function cargarWhatsApp() {
-      try {
-        const respuesta = await fetch("/api/catalog");
-        if (!respuesta.ok) return;
-
-        const datos = await respuesta.json();
-        const numero = datos?.config?.whatsapp;
-
-        if (numero && numero !== "5491100000000") {
-          linkWhatsApp.href = `https://wa.me/${numero}`;
-          linkWhatsApp.classList.remove("oculto");
-        }
-      } catch (_) {}
-    }
-
-    boton.addEventListener("click", async () => {
-      estado.textContent = "";
-      estado.classList.remove("error");
+    analizar.addEventListener("click", async () => {
+      mostrarEstado("");
+      resultados.style.display = "none";
 
       if (!consentimiento.checked) {
-        estado.textContent = "Marcá la aceptación para continuar.";
-        estado.classList.add("error");
+        mostrarEstado("Marcá la aceptación para continuar.", true);
         return;
       }
 
-      const archivo = foto.files[0];
       const texto = descripcion.value.trim();
-
-      if (!archivo && !texto) {
-        estado.textContent = "Subí una foto o describí tu piel para continuar.";
-        estado.classList.add("error");
+      if (!archivoElegido && !texto) {
+        mostrarEstado("Subí una foto o describí tu piel para continuar.", true);
         return;
       }
 
-      if (archivo && !archivo.type.startsWith("image/")) {
-        estado.textContent = "El archivo seleccionado no parece ser una imagen.";
-        estado.classList.add("error");
-        return;
-      }
-
-      if (archivo && archivo.size > 8 * 1024 * 1024) {
-        estado.textContent = "La foto supera 8 MB. Elegí una imagen más liviana.";
-        estado.classList.add("error");
-        return;
-      }
-
-      boton.disabled = true;
-      boton.textContent = "Analizando...";
-      estado.textContent = "Estamos preparando tu orientación. Puede tardar unos segundos.";
-      panelResultado.classList.add("oculto");
+      const cuerpo = { consentimiento: true };
 
       try {
-        const cuerpo = { consentimiento: true };
+        analizar.disabled = true;
+        analizar.textContent = "Analizando...";
 
-        if (archivo) {
-          cuerpo.image_base64 = await leerImagen(archivo);
-          cuerpo.media_type = archivo.type || "image/jpeg";
-          if (contexto.value.trim()) cuerpo.contexto = contexto.value.trim();
+        if (archivoElegido) {
+          cuerpo.image_base64 = await leerBase64(archivoElegido);
+          cuerpo.media_type = archivoElegido.type || "image/jpeg";
         } else {
           cuerpo.descripcion = texto;
         }
@@ -391,25 +633,33 @@
         });
 
         const datos = await respuesta.json();
-
-        if (!respuesta.ok) {
-          throw new Error(datos.detail || "No se pudo completar el análisis.");
-        }
+        if (!respuesta.ok) throw new Error(datos.detail || "No se pudo completar el análisis.");
 
         mostrarResultado(datos);
-        estado.textContent = "";
-        registrarEvento("analisis");
+        mostrarEstado("");
+        fetch("/api/event", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ tipo: "analisis", origen: "web" })
+        }).catch(() => {});
       } catch (error) {
-        estado.textContent = error.message || "Ocurrió un error. Probá nuevamente.";
-        estado.classList.add("error");
+        mostrarEstado(error.message || "Ocurrió un error. Probá de nuevo.", true);
       } finally {
-        boton.disabled = false;
-        boton.textContent = "Analizar mi piel";
+        analizar.disabled = false;
+        analizar.textContent = "Analizar mi piel";
       }
     });
 
-    cargarWhatsApp();
-    registrarEvento("visita");
+    fetch("/api/catalog")
+      .then((r) => r.json())
+      .then((datos) => {
+        const numero = datos?.config?.whatsapp;
+        if (numero && numero !== "5491100000000") {
+          whatsapp.href = `https://wa.me/${numero}`;
+          whatsapp.classList.remove("oculto");
+        }
+      })
+      .catch(() => {});
   </script>
 </body>
 </html>
