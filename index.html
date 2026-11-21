@@ -1,1 +1,415 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#68745a">
+  <title>YCR Estética | Tu piel, en una foto</title>
+  <style>
+    :root {
+      --oliva: #68745a;
+      --oliva-oscuro: #46513c;
+      --crema: #f7f4ed;
+      --blanco: #fffefa;
+      --texto: #302f2a;
+      --suave: #716f67;
+      --borde: #e6e1d5;
+    }
 
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--crema);
+      color: var(--texto);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.55;
+    }
+
+    header {
+      background: var(--blanco);
+      border-bottom: 1px solid var(--borde);
+    }
+
+    .barra {
+      width: min(100% - 32px, 980px);
+      margin: auto;
+      min-height: 76px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .logo {
+      width: 54px;
+      height: 54px;
+      object-fit: contain;
+      border-radius: 50%;
+    }
+
+    .marca { font-weight: 700; }
+    .submarca { color: var(--suave); font-size: .9rem; }
+
+    main {
+      width: min(100% - 32px, 760px);
+      margin: 38px auto 64px;
+    }
+
+    .intro { text-align: center; margin-bottom: 26px; }
+    .intro h1 { margin: 0 0 8px; font-size: clamp(1.8rem, 5vw, 2.5rem); }
+    .intro p { margin: 0; color: var(--suave); }
+
+    .tarjeta {
+      background: var(--blanco);
+      border: 1px solid var(--borde);
+      border-radius: 18px;
+      padding: clamp(18px, 4vw, 30px);
+      box-shadow: 0 8px 28px #40351a0c;
+      margin-bottom: 20px;
+    }
+
+    h2 { margin: 0 0 14px; font-size: 1.2rem; }
+    label { display: block; font-weight: 600; margin: 14px 0 7px; }
+    .ayuda { color: var(--suave); font-size: .92rem; margin: 0 0 10px; }
+
+    input[type="file"], textarea {
+      width: 100%;
+      border: 1px solid var(--borde);
+      border-radius: 10px;
+      padding: 12px;
+      background: white;
+      color: var(--texto);
+      font: inherit;
+    }
+
+    textarea { min-height: 105px; resize: vertical; }
+
+    .consentimiento {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin: 18px 0;
+      font-size: .92rem;
+      color: var(--suave);
+    }
+
+    .consentimiento input { margin-top: 5px; }
+
+    button, .boton {
+      border: 0;
+      border-radius: 10px;
+      padding: 12px 18px;
+      background: var(--oliva);
+      color: white;
+      cursor: pointer;
+      font: inherit;
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    button:hover, .boton:hover { background: var(--oliva-oscuro); }
+    button:disabled { opacity: .6; cursor: wait; }
+
+    .estado { margin: 14px 0 0; color: var(--suave); }
+    .error { color: #a23b32; }
+    .demo { color: #765b18; font-weight: 700; }
+
+    .resultado h2 { margin-top: 22px; }
+    .resultado h2:first-child { margin-top: 0; }
+    .resultado ul, .resultado ol { padding-left: 22px; }
+    .item {
+      border-left: 3px solid #c8cdbd;
+      padding: 4px 0 4px 12px;
+      margin: 10px 0;
+    }
+
+    .etiqueta {
+      display: inline-block;
+      margin: 4px 0;
+      padding: 3px 9px;
+      border-radius: 20px;
+      background: #eef0e9;
+      color: var(--oliva-oscuro);
+      font-size: .85rem;
+    }
+
+    .oculto { display: none; }
+
+    footer {
+      text-align: center;
+      color: var(--suave);
+      font-size: .88rem;
+      padding: 20px;
+    }
+
+    @media (max-width: 520px) {
+      main { margin-top: 24px; }
+      .barra { min-height: 68px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="barra">
+      <img class="logo" src="/logo-ycr.jpg" alt="Logo de YCR Estética"
+           onerror="this.style.display='none'">
+      <div>
+        <div class="marca">YCR Estética</div>
+        <div class="submarca">Piel sana</div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="intro">
+      <h1>Tu piel, en una foto</h1>
+      <p>Recibí una orientación cosmética inicial y personalizada.</p>
+    </section>
+
+    <section class="tarjeta">
+      <h2>Contanos sobre tu piel</h2>
+      <p class="ayuda">
+        Podés subir una foto clara del rostro o describir tu piel. No hace falta
+        completar las dos opciones.
+      </p>
+
+      <label for="foto">Subir una foto</label>
+      <input id="foto" type="file" accept="image/*">
+
+      <label for="descripcion">O describir tu piel</label>
+      <textarea id="descripcion" maxlength="1200"
+        placeholder="Por ejemplo: siento la piel sensible y noto resequedad en las mejillas..."></textarea>
+
+      <label for="contexto">¿Qué te gustaría mejorar? (opcional)</label>
+      <textarea id="contexto" maxlength="500"
+        placeholder="Manchas, textura, hidratación, brillo..."></textarea>
+
+      <label class="consentimiento">
+        <input id="consentimiento" type="checkbox">
+        <span>
+          Acepto que la foto o descripción se envíe a un servicio de inteligencia
+          artificial para generar esta orientación cosmética.
+        </span>
+      </label>
+
+      <button id="analizar" type="button">Analizar mi piel</button>
+      <p id="estado" class="estado" aria-live="polite"></p>
+    </section>
+
+    <section id="panelResultado" class="tarjeta resultado oculto"
+             aria-live="polite">
+      <div id="resultado"></div>
+      <p><a id="whatsapp" class="boton oculto" target="_blank"
+            rel="noopener">Consultar por WhatsApp</a></p>
+    </section>
+  </main>
+
+  <footer>
+    Orientación cosmética informativa. No reemplaza una consulta dermatológica.
+  </footer>
+
+  <script>
+    const foto = document.getElementById("foto");
+    const descripcion = document.getElementById("descripcion");
+    const contexto = document.getElementById("contexto");
+    const consentimiento = document.getElementById("consentimiento");
+    const boton = document.getElementById("analizar");
+    const estado = document.getElementById("estado");
+    const panelResultado = document.getElementById("panelResultado");
+    const resultado = document.getElementById("resultado");
+    const linkWhatsApp = document.getElementById("whatsapp");
+
+    function agregarTexto(contenedor, etiqueta, texto, clase) {
+      if (!texto) return;
+      const elemento = document.createElement(etiqueta);
+      elemento.textContent = texto;
+      if (clase) elemento.className = clase;
+      contenedor.appendChild(elemento);
+    }
+
+    function agregarLista(contenedor, titulo, elementos) {
+      if (!Array.isArray(elementos) || elementos.length === 0) return;
+
+      agregarTexto(contenedor, "h2", titulo);
+      const lista = document.createElement("ul");
+
+      elementos.forEach((dato) => {
+        const li = document.createElement("li");
+        if (typeof dato === "string") {
+          li.textContent = dato;
+        } else {
+          li.textContent = [
+            dato.nombre,
+            dato.rol ? `(${dato.rol})` : "",
+            dato.frecuencia ? `— ${dato.frecuencia}` : "",
+            dato.uso ? `— ${dato.uso}` : "",
+            dato.por_que ? `: ${dato.por_que}` : ""
+          ].filter(Boolean).join(" ");
+        }
+        lista.appendChild(li);
+      });
+
+      contenedor.appendChild(lista);
+    }
+
+    function mostrarResultado(datos) {
+      resultado.replaceChildren();
+
+      if (datos.modo_demo) {
+        agregarTexto(resultado, "p", "Resultado de demostración", "demo");
+      }
+
+      if (datos.foto_valida === false) {
+        agregarTexto(resultado, "h2", "No pudimos analizar esa foto");
+        agregarTexto(resultado, "p", datos.motivo_foto_invalida);
+      }
+
+      agregarTexto(resultado, "h2", datos.tipo_piel);
+      agregarTexto(resultado, "p", datos.resumen);
+      agregarTexto(resultado, "p", datos.tema_principal, "etiqueta");
+
+      agregarLista(resultado, "Aspectos positivos", datos.fortalezas);
+      agregarLista(resultado, "Observaciones", datos.observaciones);
+      agregarLista(resultado, "Tratamientos sugeridos", datos.tratamientos);
+
+      if (datos.plan) {
+        agregarTexto(resultado, "h2", "Plan orientativo");
+        agregarTexto(resultado, "p", datos.plan);
+      }
+
+      if (datos.opcion_premium) {
+        agregarTexto(resultado, "h2", "Opción intensiva");
+        agregarTexto(
+          resultado,
+          "p",
+          `${datos.opcion_premium.nombre} — ${datos.opcion_premium.frecuencia}. ${datos.opcion_premium.por_que}`
+        );
+      }
+
+      agregarLista(resultado, "Productos para la rutina", datos.productos);
+      agregarLista(resultado, "Rutina de mañana", datos.rutina_manana);
+      agregarLista(resultado, "Rutina de noche", datos.rutina_noche);
+
+      if (datos.consulta_medica) {
+        agregarTexto(resultado, "h2", "Consulta profesional");
+        agregarTexto(resultado, "p", datos.consulta_medica);
+      }
+
+      panelResultado.classList.remove("oculto");
+      panelResultado.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function leerImagen(archivo) {
+      return new Promise((resolve, reject) => {
+        const lector = new FileReader();
+        lector.onload = () => {
+          const dataUrl = lector.result;
+          resolve(dataUrl.split(",")[1]);
+        };
+        lector.onerror = () => reject(new Error("No se pudo leer la foto."));
+        lector.readAsDataURL(archivo);
+      });
+    }
+
+    async function registrarEvento(tipo) {
+      try {
+        await fetch("/api/event", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ tipo, origen: "web" })
+        });
+      } catch (_) {}
+    }
+
+    async function cargarWhatsApp() {
+      try {
+        const respuesta = await fetch("/api/catalog");
+        if (!respuesta.ok) return;
+
+        const datos = await respuesta.json();
+        const numero = datos?.config?.whatsapp;
+
+        if (numero && numero !== "5491100000000") {
+          linkWhatsApp.href = `https://wa.me/${numero}`;
+          linkWhatsApp.classList.remove("oculto");
+        }
+      } catch (_) {}
+    }
+
+    boton.addEventListener("click", async () => {
+      estado.textContent = "";
+      estado.classList.remove("error");
+
+      if (!consentimiento.checked) {
+        estado.textContent = "Marcá la aceptación para continuar.";
+        estado.classList.add("error");
+        return;
+      }
+
+      const archivo = foto.files[0];
+      const texto = descripcion.value.trim();
+
+      if (!archivo && !texto) {
+        estado.textContent = "Subí una foto o describí tu piel para continuar.";
+        estado.classList.add("error");
+        return;
+      }
+
+      if (archivo && !archivo.type.startsWith("image/")) {
+        estado.textContent = "El archivo seleccionado no parece ser una imagen.";
+        estado.classList.add("error");
+        return;
+      }
+
+      if (archivo && archivo.size > 8 * 1024 * 1024) {
+        estado.textContent = "La foto supera 8 MB. Elegí una imagen más liviana.";
+        estado.classList.add("error");
+        return;
+      }
+
+      boton.disabled = true;
+      boton.textContent = "Analizando...";
+      estado.textContent = "Estamos preparando tu orientación. Puede tardar unos segundos.";
+      panelResultado.classList.add("oculto");
+
+      try {
+        const cuerpo = { consentimiento: true };
+
+        if (archivo) {
+          cuerpo.image_base64 = await leerImagen(archivo);
+          cuerpo.media_type = archivo.type || "image/jpeg";
+          if (contexto.value.trim()) cuerpo.contexto = contexto.value.trim();
+        } else {
+          cuerpo.descripcion = texto;
+        }
+
+        const respuesta = await fetch("/api/analyze", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(cuerpo)
+        });
+
+        const datos = await respuesta.json();
+
+        if (!respuesta.ok) {
+          throw new Error(datos.detail || "No se pudo completar el análisis.");
+        }
+
+        mostrarResultado(datos);
+        estado.textContent = "";
+        registrarEvento("analisis");
+      } catch (error) {
+        estado.textContent = error.message || "Ocurrió un error. Probá nuevamente.";
+        estado.classList.add("error");
+      } finally {
+        boton.disabled = false;
+        boton.textContent = "Analizar mi piel";
+      }
+    });
+
+    cargarWhatsApp();
+    registrarEvento("visita");
+  </script>
+</body>
+</html>
