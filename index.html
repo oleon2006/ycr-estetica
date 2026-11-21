@@ -1,818 +1,116 @@
 <!doctype html>
-<html lang="es">
+<html lang="es" data-pais="AR">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#78816b">
-  <title>Tu piel, en una foto | YCR Estética</title>
-  <style>
-    :root {
-      --fondo: #f4f5ef;
-      --blanco: #fff;
-      --oliva: #78816b;
-      --oliva-oscuro: #535e49;
-      --oliva-claro: #eaf0e3;
-      --texto: #30332e;
-      --gris: #73776f;
-      --borde: #e3e7df;
-    }
-
-    * { box-sizing: border-box; }
-
-.camara-modal {
-  position: fixed;
-  inset: 0;
-  z-index: 1000;
-  padding: 16px 18px max(20px, env(safe-area-inset-bottom));
-  background: #f4f5ef;
-  display: flex;
-  flex-direction: column;
-}
-
-.camara-modal.oculto {
-  display: none !important;
-}
-
-.camara-etapa {
-  position: relative;
-  flex: 1;
-  min-height: 0;
-  overflow: hidden;
-  border-radius: 28px;
-  background: #20221e;
-}
-
-.camara-etapa video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.camara-ovalo {
-  position: absolute;
-  left: 50%;
-  top: 48%;
-  width: 66%;
-  height: 70%;
-  transform: translate(-50%, -50%);
-  border: 4px solid white;
-  border-radius: 50%;
-  box-shadow: 0 0 0 999px #0006;
-  pointer-events: none;
-}
-
-.camara-etapa p {
-  position: absolute;
-  bottom: 8px;
-  width: 100%;
-  color: white;
-  text-align: center;
-  font-size: 15px;
-}
-
-.camara-controles {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 22px 8px 4px;
-}
-
-.camara-controles button {
-  width: 60px;
-  height: 60px;
-  border: 1px solid #dfe4dc;
-  border-radius: 50%;
-  background: white;
-  color: var(--oliva-oscuro);
-  font-size: 30px;
-  cursor: pointer;
-}
-
-.camara-controles #capturarFoto {
-  width: 76px;
-  height: 76px;
-  border: 8px solid #e3ede0;
-  background: var(--oliva);
-  color: white;
-  font-size: 32px;
-}
-
-    body {
-      margin: 0;
-      background: var(--fondo);
-      color: var(--texto);
-      font-family: Arial, Helvetica, sans-serif;
-      line-height: 1.5;
-    }
-
-    .contenedor {
-      width: min(100% - 28px, 450px);
-      margin: 0 auto;
-    }
-
-    header { padding: 20px 0 22px; }
-
-    .marca {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .logo {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      object-fit: contain;
-      background: var(--blanco);
-    }
-
-    .nombre-marca {
-      font: italic 27px Georgia, serif;
-      color: var(--oliva-oscuro);
-      line-height: 1;
-    }
-
-    .lema {
-      margin-top: 5px;
-      color: var(--gris);
-      font-size: 10px;
-      letter-spacing: 2.3px;
-      text-transform: uppercase;
-    }
-
-    .tarjeta {
-      background: var(--blanco);
-      border-radius: 25px;
-      box-shadow: 0 12px 30px #29351d0c;
-    }
-
-    .principal {
-      padding: 30px 22px 24px;
-      text-align: center;
-    }
-
-    .icono-rostro {
-      display: grid;
-      place-items: center;
-      width: 100px;
-      height: 100px;
-      margin: 0 auto 17px;
-      border: 2px dashed #98a58d;
-      border-radius: 50%;
-      background: #f1f5ed;
-      color: var(--oliva);
-    }
-
-    .icono-rostro svg { width: 48px; height: 48px; }
-
-    h1 {
-      margin: 0 0 9px;
-      font: 600 27px Georgia, "Times New Roman", serif;
-    }
-
-    .intro {
-      margin: 0 auto 21px;
-      color: var(--gris);
-      max-width: 365px;
-      font-size: 15px;
-    }
-
-    .boton {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 9px;
-      width: 100%;
-      min-height: 52px;
-      border: 0;
-      border-radius: 15px;
-      padding: 12px 16px;
-      font: inherit;
-      font-weight: 700;
-      text-decoration: none;
-      cursor: pointer;
-    }
-
-    .boton svg { width: 19px; height: 19px; }
-
-    .boton-principal {
-      margin-top: 10px;
-      background: var(--oliva);
-      color: white;
-      box-shadow: 0 5px 12px #53604935;
-    }
-
-    .boton-principal:hover { background: var(--oliva-oscuro); }
-
-    .boton-secundario {
-      margin-top: 10px;
-      border: 1px solid var(--borde);
-      background: white;
-      color: var(--texto);
-    }
-
-    .boton:disabled { opacity: .6; cursor: wait; }
-
-    .chips {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 7px;
-      margin-top: 16px;
-    }
-
-    .chip {
-      padding: 5px 9px;
-      border-radius: 20px;
-      background: #f3f5f1;
-      color: var(--gris);
-      font-size: 11px;
-      white-space: nowrap;
-    }
-
-    .consejos {
-      margin-top: 16px;
-      padding: 15px 18px;
-      border-radius: 18px;
-      background: var(--oliva-claro);
-    }
-
-    .consejos strong { font-size: 14px; }
-
-    .consejos ul {
-      margin: 7px 0 0;
-      padding-left: 19px;
-      color: #555b50;
-      font-size: 13px;
-    }
-
-    .sin-foto {
-      display: block;
-      width: fit-content;
-      margin: 22px auto;
-      border: 0;
-      background: none;
-      color: var(--gris);
-      font: inherit;
-      font-size: 13px;
-      text-decoration: underline;
-      cursor: pointer;
-    }
-
-    .entrada-texto {
-      margin: 0 0 18px;
-      text-align: left;
-    }
-
-    .entrada-texto label,
-    .consentimiento { font-size: 13px; }
-
-    textarea {
-      display: block;
-      width: 100%;
-      min-height: 100px;
-      margin-top: 7px;
-      border: 1px solid var(--borde);
-      border-radius: 12px;
-      padding: 12px;
-      font: inherit;
-      resize: vertical;
-    }
-
-    .foto-preview {
-      display: none;
-      width: min(100%, 230px);
-      max-height: 260px;
-      margin: 14px auto 0;
-      border-radius: 16px;
-      object-fit: cover;
-    }
-
-    .consentimiento {
-      display: none;
-      align-items: flex-start;
-      gap: 9px;
-      margin: 15px 0 2px;
-      color: var(--gris);
-      text-align: left;
-    }
-
-    .consentimiento input { margin-top: 4px; }
-
-    .estado {
-      min-height: 20px;
-      margin: 12px 0 0;
-      color: var(--gris);
-      font-size: 13px;
-    }
-
-    .error { color: #a43f36; }
-
-    .legal {
-      margin: 22px 4px 30px;
-      color: var(--gris);
-      text-align: center;
-      font-size: 11px;
-    }
-
-    .legal p { margin: 8px 0; }
-
-    .legal a { color: var(--oliva-oscuro); }
-
-    .contacto {
-      margin-bottom: 28px;
-      padding: 24px 20px;
-      text-align: center;
-    }
-
-    .logo-pie {
-      width: 62px;
-      height: 62px;
-      margin-bottom: 8px;
-      border-radius: 50%;
-      object-fit: contain;
-    }
-
-    .contacto h2 {
-      margin: 0 0 7px;
-      font: 600 20px Georgia, "Times New Roman", serif;
-    }
-
-    .contacto p {
-      margin: 4px 0;
-      color: var(--gris);
-      font-size: 13px;
-    }
-
-    .contacto .profesion {
-      color: var(--texto);
-      font-weight: 700;
-    }
-
-    .links {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 9px;
-      margin-top: 16px;
-    }
-
-    .link-pastilla {
-      padding: 8px 13px;
-      border: 1px solid var(--borde);
-      border-radius: 25px;
-      color: var(--oliva-oscuro);
-      font-size: 12px;
-      font-weight: 700;
-      text-decoration: none;
-    }
-
-    .resultados {
-      display: none;
-      margin: 18px 0;
-      padding: 22px;
-    }
-
-    .resultados h2 {
-      margin: 18px 0 7px;
-      font: 600 20px Georgia, serif;
-    }
-
-    .resultados h2:first-child { margin-top: 0; }
-
-    .resultados p { margin: 6px 0; }
-    .resultados ul { padding-left: 20px; }
-    .resultados li { margin: 6px 0; }
-
-    .subtitulo {
-      color: var(--oliva-oscuro);
-      font-weight: 700;
-    }
-
-    .oculto { display: none !important; }
-
-    @media (max-width: 380px) {
-      .principal { padding: 25px 17px 21px; }
-      h1 { font-size: 24px; }
-      .nombre-marca { font-size: 24px; }
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tu piel, en una foto · YCR Estética</title>
+<meta name="description" content="Recibí una orientación cosmética de YCR Estética a partir de una foto o descripción de tu piel.">
+<meta name="theme-color" content="#7b8068">
+<link rel="icon" href="/logo-ycr.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f8f6ee;--card:#fffefa;--ink:#37382f;--muted:#77776d;--line:#e9e5d9;--brand:#7b8068;--brand-dark:#5c634d;--brand-soft:#edf0e5;--beige:#f2eadc;--rose:#b99b85;--amber:#c9973f;--wa:#25d366;--r:20px;--shadow:0 10px 30px -12px #4f51331f}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}button,textarea{font:inherit}h1,h2,h3,h4{font-family:"Cormorant Garamond",Georgia,serif;letter-spacing:0;margin:0}.app{max-width:480px;margin:0 auto;min-height:100dvh;padding:20px 16px 100px;display:flex;flex-direction:column}.brand{display:flex;align-items:center;gap:12px;margin-bottom:24px}.brand img{width:54px;height:54px;border-radius:50%;object-fit:cover;box-shadow:var(--shadow);flex:none}.brand b{display:block;font-family:"Cormorant Garamond",Georgia,serif;font-size:29px;line-height:1;color:var(--brand-dark)}.brand small{display:block;margin-top:4px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}.screen{display:none;flex-direction:column;flex:1;animation:fade .25s ease}.screen.on{display:flex}@keyframes fade{from{opacity:.5;transform:translateY(5px)}to{opacity:1;transform:none}}.hero{position:relative;overflow:hidden;background:var(--card);border-radius:28px;padding:28px 22px;text-align:center;box-shadow:var(--shadow)}.hero:before{content:"";position:absolute;right:-65px;top:-90px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,var(--brand-soft),transparent 72%)}.hero>*{position:relative}.face{width:120px;height:120px;margin:4px auto 18px;border-radius:50%;border:2px dashed var(--brand);display:grid;place-items:center;background:var(--brand-soft);color:var(--brand-dark)}.hero h1{font-size:30px;line-height:1.12;margin-bottom:10px}.hero>p{margin:0 0 21px;color:var(--muted);line-height:1.5}.btn{appearance:none;border:0;cursor:pointer;text-decoration:none;font:600 15px Inter,sans-serif;border-radius:16px;padding:15px 17px;width:100%;display:flex;align-items:center;justify-content:center;gap:10px;transition:background .18s,transform .1s}.btn:active{transform:scale(.985)}.btn-primary{background:var(--brand);color:#fff;box-shadow:0 7px 18px -8px var(--brand-dark)}.btn-primary:hover{background:var(--brand-dark)}.btn-ghost{background:#fff;color:var(--ink);border:1.5px solid var(--line);margin-top:10px}.btn-ghost:hover{background:var(--beige)}.btn-wa{background:var(--wa);color:#fff}.btn[disabled]{opacity:.55;cursor:wait}.perks{display:flex;gap:7px;justify-content:center;flex-wrap:wrap;margin-top:17px}.perk{font-size:11px;color:var(--muted);background:#f4f4ef;border-radius:99px;padding:6px 9px}.tips{margin-top:17px;background:var(--brand-soft);border-radius:var(--r);padding:15px 18px;font-size:13px;color:#565b4c}.tips b{display:block;margin-bottom:6px;color:var(--ink)}.tips ul{margin:0;padding-left:18px;line-height:1.65}.shy{margin-top:auto;padding:25px 0;text-align:center}.shy button,.plain-link{border:0;padding:0;background:none;color:var(--muted);font-size:12.5px;text-decoration:underline;text-underline-offset:3px;cursor:pointer}.legal{font-size:11px;color:var(--muted);text-align:center;margin:12px 2px;line-height:1.55}.legal a{color:var(--brand-dark)}.foot{margin-top:25px;padding:21px 18px;border-radius:var(--r);background:var(--card);box-shadow:var(--shadow);text-align:center}.foot img{width:64px;height:64px;border-radius:50%;object-fit:cover;box-shadow:var(--shadow)}.foot .who{font:700 21px "Cormorant Garamond",Georgia,serif;margin-top:8px}.foot .cred{font-size:13px;line-height:1.5;margin:5px 0;color:var(--muted)}.links{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin-top:13px}.links a{display:inline-flex;align-items:center;gap:6px;padding:8px 13px;border:1.5px solid var(--line);border-radius:99px;background:#fff;color:var(--brand-dark);font-size:12.5px;font-weight:600;text-decoration:none}.links a:hover{background:var(--brand-soft)}.consent{display:flex;gap:9px;align-items:flex-start;font-size:12.5px;color:var(--muted);margin-top:17px;line-height:1.45;cursor:pointer}.consent input{flex:none;width:18px;height:18px;margin:1px 0 0;accent-color:var(--brand)}.consent.need{color:#8a2c1f}.cam-wrap{position:relative;border-radius:28px;overflow:hidden;background:#111;aspect-ratio:3/4}.cam-wrap video{width:100%;height:100%;object-fit:cover;transform:scaleX(-1)}.cam-wrap.back video{transform:none}.oval{position:absolute;inset:10% 18% 14%;border:2.5px solid #ffffffe0;border-radius:50%;box-shadow:0 0 0 999px #0006;pointer-events:none}.cam-hint{position:absolute;left:0;right:0;bottom:13px;text-align:center;color:#fff;font-size:14px;text-shadow:0 1px 3px #000}.cam-bar{display:flex;align-items:center;justify-content:space-between;margin-top:17px}.iconbtn{width:49px;height:49px;border-radius:50%;border:1.5px solid var(--line);background:#fff;display:grid;place-items:center;cursor:pointer;color:var(--ink)}.shutter{width:76px;height:76px;border-radius:50%;border:6px solid #e3e8db;background:var(--brand);cursor:pointer;box-shadow:var(--shadow)}.preview{border-radius:28px;overflow:hidden;box-shadow:var(--shadow);aspect-ratio:3/4;background:var(--beige)}.preview img{width:100%;height:100%;object-fit:cover}.lbl{font-weight:600;font-size:14px;display:block;margin:18px 0 9px}.chips{display:flex;flex-wrap:wrap;gap:8px}.chip{border:1.5px solid var(--line);background:#fff;border-radius:99px;padding:8px 12px;font-size:12.5px;cursor:pointer;user-select:none}.chip.on{background:var(--brand-soft);border-color:var(--brand);color:var(--brand-dark)}.row{display:flex;gap:10px;margin-top:19px}.row .btn{margin:0}.field{width:100%;border:1.5px solid var(--line);border-radius:15px;padding:13px;font:14px Inter,sans-serif;resize:vertical;min-height:125px;background:#fffefa;color:var(--ink)}.field:focus{outline:2px solid var(--brand-soft);border-color:var(--brand)}.loading{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:19px;padding:30px 0}.scan{width:176px;height:176px;border-radius:50%;overflow:hidden;position:relative;box-shadow:var(--shadow);background:var(--brand-soft)}.scan img{width:100%;height:100%;object-fit:cover}.scan:after{content:"";position:absolute;left:0;right:0;height:38%;background:linear-gradient(transparent,#7b806866,transparent);animation:scan 1.8s ease-in-out infinite}@keyframes scan{0%{top:-40%}100%{top:105%}}.steps{list-style:none;padding:0;margin:0;text-align:left;font-size:13px;color:var(--muted)}.steps li{padding:5px 0}.steps li.done{color:var(--brand-dark)}.steps li.done:before{content:"✓ "}.steps li.now{color:var(--ink);font-weight:600}.result-head{display:flex;gap:13px;align-items:center;margin:0 0 14px}.result-head img{width:62px;height:62px;border-radius:50%;object-fit:cover;border:3px solid white;box-shadow:var(--shadow)}.result-head h2{font-size:24px}.tag{display:inline-block;font-size:11px;background:var(--brand-soft);color:var(--brand-dark);border-radius:99px;padding:4px 9px;margin-top:3px}.card{background:var(--card);border-radius:var(--r);padding:17px 18px;box-shadow:var(--shadow);margin-bottom:13px}.card h3{font-size:18px;margin-bottom:10px}.card p{margin:0;line-height:1.55;color:#56564e;font-size:14px}.good{display:flex;flex-wrap:wrap;gap:6px;margin-top:11px}.good span{background:var(--brand-soft);color:var(--brand-dark);font-size:11.5px;padding:5px 9px;border-radius:99px}.obs{padding:11px 0;border-top:1px solid var(--line)}.obs:first-of-type{border-top:0;padding-top:0}.obs-top{display:flex;justify-content:space-between;align-items:center;gap:8px;font-weight:600;font-size:14px}.obs p{font-size:13px;margin-top:4px;color:var(--muted)}.lvl{font-size:10px;font-weight:600;padding:3px 8px;border-radius:99px;white-space:nowrap}.lvl.leve{background:var(--brand-soft);color:var(--brand-dark)}.lvl.moderado{background:#f7ecd6;color:#8a6420}.lvl.marcado{background:#f2e2d6;color:#865d43}.rec{display:flex;gap:11px;padding:12px 0;border-top:1px solid var(--line)}.rec:first-of-type{border-top:0;padding-top:0}.rec .num{flex:none;width:29px;height:29px;border-radius:50%;background:var(--brand-soft);color:var(--brand-dark);display:grid;place-items:center;font-weight:700;font-size:13px}.rec b{display:block;font-size:14px}.rec .meta{font-size:11px;color:var(--muted);margin-top:3px}.rec p{font-size:13px;margin-top:5px}.rol{display:inline-block;margin-left:5px;font-size:10px;color:var(--brand-dark);background:var(--brand-soft);border-radius:99px;padding:2px 7px}.plan{margin-top:12px;padding:12px 14px;border-radius:13px;background:var(--brand-soft)}.plan h4{font:600 13px Inter,sans-serif;color:var(--brand-dark);margin:0 0 4px}.plan p{font-size:13px}.premium{border:1.5px solid #b99b8580}.premium .num{background:var(--rose);color:#fff}.routine{display:grid;grid-template-columns:1fr 1fr;gap:10px}.routine h4{margin:0 0 7px;font:600 12px Inter,sans-serif;color:var(--muted)}.routine ol{margin:0;padding-left:18px;font-size:12.5px;line-height:1.6}.med{background:#fff8ec;border:1px solid #f0dfbd;color:#7a5a1e;border-radius:var(--r);padding:13px 15px;font-size:13px;margin-bottom:13px;line-height:1.5}.cta{text-align:center;background:linear-gradient(160deg,#fffefa,var(--brand-soft))}.cta p{margin-bottom:14px}.demo{font-size:11.5px;background:#fff3cd;color:#7a5a1e;border-radius:12px;padding:8px 11px;margin-bottom:12px;text-align:center}.err{background:#fdecea;color:#8a2c1f;border-radius:13px;padding:11px 13px;font-size:13px;margin-top:12px;display:none}.sticky{position:fixed;left:0;right:0;bottom:0;padding:12px 16px calc(12px + env(safe-area-inset-bottom));background:linear-gradient(transparent,var(--bg) 35%);display:none}.sticky.on{display:block}.sticky .btn{max-width:448px;margin:0 auto}.restart{display:block;margin:14px auto 0;background:none;border:0;color:var(--muted);text-decoration:underline;cursor:pointer;font-size:12.5px}.privacy{padding:14px 15px;text-align:left;border:1px solid var(--line);border-radius:14px;background:#fffefa}.privacy summary{cursor:pointer;text-decoration:underline}.privacy p{font-size:11px;margin:9px 0 0}.hidden{display:none!important}@media(max-width:360px){.routine{grid-template-columns:1fr}.app{padding-left:13px;padding-right:13px}.hero{padding:24px 17px}}
+</style>
 </head>
-
-<div id="camaraModal" class="camara-modal oculto">
-  <div class="camara-etapa">
-    <video id="videoCamara" autoplay playsinline></video>
-    <div class="camara-ovalo"></div>
-    <p>Ubicá tu rostro dentro del óvalo</p>
-  </div>
-
-  <div class="camara-controles">
-    <button id="cerrarCamara" type="button" aria-label="Volver">‹</button>
-    <button id="capturarFoto" type="button" aria-label="Tomar foto">●</button>
-    <button id="girarCamara" type="button" aria-label="Cambiar cámara">⟳</button>
-  </div>
-
-  <canvas id="canvasCaptura" class="oculto"></canvas>
-</div>
-
 <body>
-  <header class="contenedor">
-    <div class="marca">
-      <img class="logo" src="/logo-ycr.jpg" alt="Logo de YCR Estética"
-           onerror="this.style.display='none'">
-      <div>
-        <div class="nombre-marca">YCR Estética</div>
-        <div class="lema">Piel sana</div>
-      </div>
-    </div>
+<div class="app">
+  <header class="brand">
+    <img src="/logo-ycr.jpg" alt="YCR Estética" onerror="this.style.display='none'">
+    <div><b id="brandName">YCR Estética</b><small id="brandSub">Piel Sana</small></div>
   </header>
 
-  <main class="contenedor">
-    <section class="tarjeta principal">
-      <div class="icono-rostro" aria-hidden="true">
-        <svg viewBox="0 0 48 48" fill="none" stroke="currentColor"
-             stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M15 8H11a4 4 0 0 0-4 4v4M33 8h4a4 4 0 0 1 4 4v4M7 32v4a4 4 0 0 0 4 4h4M41 32v4a4 4 0 0 1-4 4h-4"/>
-          <circle cx="24" cy="20" r="6"/>
-          <path d="M13 35c1.7-5 5.3-7.5 11-7.5S33.3 30 35 35"/>
-        </svg>
-      </div>
+  <section class="screen on" id="s-home">
+    <div class="hero">
+      <div class="face" aria-hidden="true"><svg width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"/><circle cx="12" cy="11" r="4"/><path d="M8 18c1-1.3 2.4-2 4-2s3 .7 4 2"/></svg></div>
+      <h1 id="appTitle">Tu piel, en una foto</h1>
+      <p>Sacate una selfie y recibí una orientación cosmética con cuidados y tratamientos de YCR Estética.</p>
+      <button class="btn btn-primary" id="btnCamera" type="button">📷 Sacar una foto</button>
+      <button class="btn btn-ghost" id="btnUpload" type="button">⇧ Subir una foto de mi galería</button>
+      <input type="file" id="fileInput" accept="image/*" hidden>
+      <input type="file" id="fileCapture" accept="image/*" capture="user" hidden>
+      <div class="perks"><span class="perk">⏱ Unos segundos</span><span class="perk">🔒 Se procesa para este análisis</span><span class="perk">✨ Gratis</span></div>
+    </div>
+    <div class="tips"><b>Para un mejor resultado</b><ul><li>Luz natural, de frente a una ventana</li><li>Sin maquillaje y con el pelo recogido</li><li>Rostro completo dentro del óvalo</li></ul></div>
+    <div class="shy"><button id="lnkShy" type="button">Prefiero no subir una foto, quiero contarlo</button></div>
+  </section>
 
-      <h1>Tu piel, en una foto</h1>
-      <p class="intro">
-        Sacate una selfie y recibí una lectura orientativa de tu piel con
-        cuidados y tratamientos de YCR Estética.
-      </p>
+  <section class="screen" id="s-camera">
+    <div class="cam-wrap" id="camWrap"><video id="video" autoplay playsinline muted></video><div class="oval"></div><div class="cam-hint">Ubicá tu rostro dentro del óvalo</div></div>
+    <div class="cam-bar">
+      <button class="iconbtn" id="btnCamBack" type="button" aria-label="Volver">‹</button>
+      <button class="shutter" id="btnShutter" type="button" aria-label="Sacar foto"></button>
+      <button class="iconbtn" id="btnFlip" type="button" aria-label="Cambiar cámara">⟳</button>
+    </div>
+    <div class="err" id="camErr"></div>
+  </section>
 
-<button id="sacarFoto" class="boton boton-principal" type="button">
-  Sacar una foto
-</button>
+  <section class="screen" id="s-preview">
+    <div class="preview"><img id="previewImg" alt="Vista previa"></div>
+    <label class="lbl">¿Qué te gustaría mejorar? <span style="font-weight:400;color:var(--muted)">(opcional)</span></label>
+    <div class="chips" id="chips"></div>
+    <label class="consent"><input type="checkbox" class="chkConsent"><span>Acepto que la imagen y mis respuestas se envíen a Google Gemini para generar una orientación cosmética.</span></label>
+    <div class="row"><button class="btn btn-ghost" id="btnRetake" type="button">Otra foto</button><button class="btn btn-primary" id="btnAnalyze" type="button">Analizar mi piel</button></div>
+  </section>
 
-      <button id="subirFoto" class="boton boton-secundario" type="button">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-             stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 16V4m0 0L7 9m5-5 5 5"/>
-          <path d="M5 14v5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-5"/>
-        </svg>
-        Subir una foto de mi galería
-      </button>
+  <section class="screen" id="s-describe">
+    <h2 style="font-size:25px;margin-bottom:8px">Contanos de tu piel</h2>
+    <p style="color:var(--muted);margin:0 0 16px;line-height:1.5">Describí cómo la sentís y qué te gustaría mejorar.</p>
+    <textarea class="field" id="descText" maxlength="1200" placeholder="Ej.: noto resequedad en las mejillas y manchas en los pómulos..."></textarea>
+    <label class="consent"><input type="checkbox" class="chkConsent"><span>Acepto que mi descripción se envíe a Google Gemini para generar una orientación cosmética.</span></label>
+    <div class="row"><button class="btn btn-ghost" id="btnDescBack" type="button">Volver</button><button class="btn btn-primary" id="btnDescSend" type="button">Ver recomendaciones</button></div>
+    <p class="legal">Con una foto el análisis puede ser más personalizado. <button class="plain-link" id="lnkToPhoto" type="button">Prefiero sacar una foto</button></p>
+  </section>
 
-      <input id="camara" class="oculto" type="file" accept="image/*" capture="user">
-      <input id="galeria" class="oculto" type="file" accept="image/*">
+  <section class="screen" id="s-loading"><div class="loading"><div class="scan" id="scan"></div><h2 style="font-size:23px">Analizando tu piel…</h2><ul class="steps" id="steps"><li>Revisando textura y poros</li><li>Observando tono y manchas</li><li>Mirando hidratación y líneas finas</li><li>Armando tu orientación</li></ul><p id="slowNote" class="legal hidden">Puede tardar un poco más; dejá esta pantalla abierta.</p></div></section>
+  <section class="screen" id="s-result"><div id="result"></div></section>
 
-      <img id="vistaPrevia" class="foto-preview" alt="Vista previa de la foto">
+  <div class="err" id="err"></div>
+  <p class="legal" id="legal">Lectura cosmética orientativa. No reemplaza una consulta médica o dermatológica.<br>La foto se envía a Google Gemini para analizarla. Esta página no guarda la imagen en una base de datos. <a href="#privacidad" id="privacyLink">Privacidad</a></p>
+  <details class="privacy" id="privacy"><summary>Información sobre privacidad</summary><p>Si elegís enviar una foto o descripción, se transmite a Google Gemini para generar el resultado. No cargues imágenes de otra persona sin su permiso. El análisis es orientativo y no constituye un diagnóstico médico.</p></details>
 
-      <div id="descripcionBox" class="entrada-texto oculto">
-        <label for="descripcion">Contanos cómo sentís tu piel</label>
-        <textarea id="descripcion" maxlength="1200"
-          placeholder="Por ejemplo: noto resequedad, sensibilidad o manchas..."></textarea>
-      </div>
+  <footer class="foot" id="foot">
+    <img src="/logo-ycr.jpg" alt="YCR Estética" onerror="this.style.display='none'">
+    <div class="who" id="footName">Yolyma Rodriguez</div>
+    <p class="cred" id="footCred"><b>YCR Estética · Piel Sana</b><br>Buenos Aires, Argentina</p>
+    <div class="links"><a id="footIg" href="https://www.instagram.com/ycr.estetica/" target="_blank" rel="noopener">◎ <span>@ycr.estetica</span></a><a id="footWa" data-origin="pie" target="_blank" rel="noopener">● WhatsApp</a></div>
+  </footer>
+</div>
+<div class="sticky" id="sticky"><a class="btn btn-wa" id="waSticky" data-origin="resultado" target="_blank" rel="noopener">Escribir por WhatsApp</a></div>
 
-      <label id="consentimientoBox" class="consentimiento">
-        <input id="consentimiento" type="checkbox">
-        <span>
-          Acepto que mi foto o descripción se envíe a Gemini de Google para
-          generar una orientación cosmética.
-        </span>
-      </label>
+<script>
+const $ = s => document.querySelector(s);
+const FALLBACK = {marca:"YCR Estética",marca_sub:"Piel Sana",nombre_app:"Tu piel, en una foto",nombre_profesional:"Yolyma",nombre_completo:"Yolyma Rodriguez",instagram:"ycr.estetica",whatsapp:"5491100000000",credenciales:["YCR Estética · Piel Sana","Especialistas en cuidado de la piel · Buenos Aires"]};
+const state = {cfg:FALLBACK,image:null,stream:null,facing:"user",mode:"photo",description:"",concerns:new Set(),consent:false,lastResult:null};
+const concerns=["Manchas","Arrugas y líneas","Poros","Flacidez","Piel opaca","Deshidratación","Ojeras","Acné / granitos","Rojeces"];
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
+function show(id){document.querySelectorAll(".screen").forEach(s=>s.classList.toggle("on",s.id===id));$("#err").style.display="none";$("#sticky").classList.toggle("on",id==="s-result"&&!!state.lastResult?.foto_valida);window.scrollTo({top:0,behavior:"smooth"});}
+function err(message,selector="#err"){const e=$(selector);e.textContent=message;e.style.display="block";}
+function track(type,origin=""){fetch("/api/event",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({tipo:type,origen:origin})}).catch(()=>{});}
+function setWhatsAppLinks(){const c=state.cfg;const n=String(c.whatsapp||"").replace(/\D/g,"");if(!n||n==="5491100000000"){ $("#footWa").classList.add("hidden");return;}const msg=`Hola ${c.nombre_profesional}! Te escribo desde la app de análisis de piel de ${c.marca}.`;const url=`https://wa.me/${n}?text=${encodeURIComponent(msg)}`;$("#footWa").href=url;$("#footWa").classList.remove("hidden");}
+fetch("/api/catalog").then(r=>r.ok?r.json():null).then(d=>{if(!d?.config)return;state.cfg={...FALLBACK,...d.config};const c=state.cfg;$("#brandName").textContent=c.marca;$("#brandSub").textContent=c.marca_sub;$("#appTitle").textContent=c.nombre_app;$("#footName").textContent=c.nombre_completo||c.nombre_profesional;$("#footCred").innerHTML=(c.credenciales||[]).map((x,i)=>i?`<span>${esc(x)}</span>`:`<b>${esc(x)}</b>`).join("<br>");const ig=String(c.instagram||"").replace(/^@/,"");$("#footIg").href=`https://www.instagram.com/${encodeURIComponent(ig)}/`;$("#footIg span").textContent="@"+ig;setWhatsAppLinks();}).catch(()=>{});
+let visits=false;try{visits=sessionStorage.getItem("ycr-visit")==="1";if(!visits){sessionStorage.setItem("ycr-visit","1");track("visita");}}catch{track("visita");}
+document.addEventListener("click",e=>{const a=e.target.closest('a[href^="https://wa.me/"]');if(a)track("wa",a.dataset.origin||"");});
+document.querySelectorAll(".chkConsent").forEach(ch=>ch.addEventListener("change",()=>{state.consent=ch.checked;document.querySelectorAll(".chkConsent").forEach(x=>x.checked=state.consent);if(state.consent)document.querySelectorAll(".consent").forEach(x=>x.classList.remove("need"));}));
+$("#chips").innerHTML=concerns.map(x=>`<button class="chip" type="button" data-concern="${esc(x)}">${esc(x)}</button>`).join("");
+$("#chips").addEventListener("click",e=>{const b=e.target.closest("[data-concern]");if(!b)return;b.classList.toggle("on");state.concerns.has(b.dataset.concern)?state.concerns.delete(b.dataset.concern):state.concerns.add(b.dataset.concern);});
 
-      <button id="analizar" class="boton boton-principal oculto" type="button">
-        Analizar mi piel
-      </button>
-      <button id="cambiar" class="sin-foto oculto" type="button">
-        Elegir otra foto
-      </button>
-
-      <div class="chips">
-        <span class="chip">⏱ Unos segundos</span>
-        <span class="chip">🔒 No se guarda en esta página</span>
-        <span class="chip">✨ Orientación gratuita</span>
-      </div>
-    </section>
-
-    <section class="consejos">
-      <strong>Para un mejor resultado</strong>
-      <ul>
-        <li>Usá luz natural, de frente a una ventana.</li>
-        <li>Si es posible, sacate la foto sin maquillaje.</li>
-        <li>Incluí el rostro completo y evitá filtros.</li>
-      </ul>
-    </section>
-
-    <button id="contarlo" class="sin-foto" type="button">
-      Prefiero no subir una foto, quiero contarlo
-    </button>
-
-    <p id="estado" class="estado" role="status" aria-live="polite"></p>
-
-    <section id="resultados" class="tarjeta resultados" aria-live="polite"></section>
-
-    <section class="legal">
-      <p>Lectura orientativa y cosmética. No reemplaza una consulta médica o dermatológica.</p>
-      <p>
-        Si elegís una foto, se envía a Gemini de Google para generar el análisis.
-        Esta página no guarda la imagen en una base de datos.
-      </p>
-    </section>
-
-    <section class="tarjeta contacto">
-      <img class="logo-pie" src="/logo-ycr.jpg" alt=""
-           onerror="this.style.display='none'">
-      <h2>Yolyma Rodriguez</h2>
-      <p class="profesion">Dermocosmiatra</p>
-      <p>YCR Estética · Piel Sana</p>
-      <p>Buenos Aires</p>
-      <div class="links">
-        <a class="link-pastilla" href="https://www.instagram.com/ycr.estetica/"
-           target="_blank" rel="noopener">Instagram · @ycr.estetica</a>
-        <a id="whatsapp" class="link-pastilla oculto"
-           target="_blank" rel="noopener">WhatsApp</a>
-      </div>
-    </section>
-  </main>
-
-  <script>
-  
-;
-  const camaraModal = document.getElementById("camaraModal");
-const videoCamara = document.getElementById("videoCamara");
-const canvasCaptura = document.getElementById("canvasCaptura");
-
-let flujoCamara = null;
-let camaraFrontal = true;
-
-async function abrirCamara() {
-  try {
-    flujoCamara = await navigator.mediaDevices.getUserMedia({
-      audio: false,
-      video: { facingMode: camaraFrontal ? "user" : "environment" }
-    });
-
-    videoCamara.srcObject = flujoCamara;
-    camaraModal.classList.remove("oculto");
-  } catch (error) {
-    mostrarEstado("No se pudo abrir la cámara. Revisá el permiso o elegí una foto de la galería.", true);
-  }
-}
-
-function cerrarCamara() {
-  if (flujoCamara) {
-    flujoCamara.getTracks().forEach((track) => track.stop());
-    flujoCamara = null;
-  }
-  videoCamara.srcObject = null;
-  camaraModal.classList.add("oculto");
-}
-
-document.getElementById("sacarFoto").addEventListener("click", abrirCamara);
-document.getElementById("cerrarCamara").addEventListener("click", cerrarCamara);
-
-document.getElementById("girarCamara").addEventListener("click", async () => {
-  camaraFrontal = !camaraFrontal;
-  cerrarCamara();
-  await abrirCamara();
-});
-
-document.getElementById("capturarFoto").addEventListener("click", () => {
-  if (!videoCamara.videoWidth) return;
-
-  canvasCaptura.width = videoCamara.videoWidth;
-  canvasCaptura.height = videoCamara.videoHeight;
-
-  const contextoCanvas = canvasCaptura.getContext("2d");
-  contextoCanvas.drawImage(videoCamara, 0, 0);
-
-  canvasCaptura.toBlob((blob) => {
-    if (!blob) {
-      mostrarEstado("No se pudo tomar la foto. Probá nuevamente.", true);
-      return;
-    }
-
-    const fotoTomada = new File([blob], "foto-ycr.jpg", {
-      type: "image/jpeg"
-    });
-
-    cerrarCamara();
-    prepararFoto(fotoTomada);
-  }, "image/jpeg", 0.92);
-});
-    const galeria = document.getElementById("galeria");
-    const vistaPrevia = document.getElementById("vistaPrevia");
-    const descripcionBox = document.getElementById("descripcionBox");
-    const descripcion = document.getElementById("descripcion");
-    const consentimientoBox = document.getElementById("consentimientoBox");
-    const consentimiento = document.getElementById("consentimiento");
-    const analizar = document.getElementById("analizar");
-    const cambiar = document.getElementById("cambiar");
-    const estado = document.getElementById("estado");
-    const resultados = document.getElementById("resultados");
-    const whatsapp = document.getElementById("whatsapp");
-
-    let archivoElegido = null;
-    let urlPrevia = null;
-
-    document.getElementById("sacarFoto").addEventListener("click", () => camara.click());
-    document.getElementById("subirFoto").addEventListener("click", () => galeria.click());
-
-    function prepararFoto(archivo) {
-      if (!archivo) return;
-      if (!archivo.type.startsWith("image/")) {
-        mostrarEstado("Elegí un archivo de imagen.", true);
-        return;
-      }
-      if (archivo.size > 8 * 1024 * 1024) {
-        mostrarEstado("La foto supera 8 MB. Elegí una imagen más liviana.", true);
-        return;
-      }
-
-      archivoElegido = archivo;
-      if (urlPrevia) URL.revokeObjectURL(urlPrevia);
-      urlPrevia = URL.createObjectURL(archivo);
-
-      vistaPrevia.src = urlPrevia;
-      vistaPrevia.style.display = "block";
-      descripcionBox.classList.add("oculto");
-      consentimientoBox.style.display = "flex";
-      analizar.classList.remove("oculto");
-      cambiar.classList.remove("oculto");
-      mostrarEstado("");
-    }
-
-    camara.addEventListener("change", () => prepararFoto(camara.files[0]));
-    galeria.addEventListener("change", () => prepararFoto(galeria.files[0]));
-
-    document.getElementById("contarlo").addEventListener("click", () => {
-      archivoElegido = null;
-      vistaPrevia.style.display = "none";
-      descripcionBox.classList.remove("oculto");
-      consentimientoBox.style.display = "flex";
-      analizar.classList.remove("oculto");
-      cambiar.classList.add("oculto");
-      descripcion.focus();
-    });
-
-    cambiar.addEventListener("click", () => {
-      archivoElegido = null;
-      camara.value = "";
-      galeria.value = "";
-      vistaPrevia.style.display = "none";
-      consentimientoBox.style.display = "none";
-      analizar.classList.add("oculto");
-      cambiar.classList.add("oculto");
-      mostrarEstado("");
-    });
-
-    function mostrarEstado(mensaje, esError) {
-      estado.textContent = mensaje;
-      estado.classList.toggle("error", Boolean(esError));
-    }
-
-    function agregarTexto(tag, texto, clase) {
-      if (!texto) return;
-      const elemento = document.createElement(tag);
-      elemento.textContent = texto;
-      if (clase) elemento.className = clase;
-      resultados.appendChild(elemento);
-    }
-
-    function agregarLista(titulo, lista) {
-      if (!Array.isArray(lista) || !lista.length) return;
-      agregarTexto("h2", titulo);
-      const ul = document.createElement("ul");
-
-      lista.forEach((dato) => {
-        const li = document.createElement("li");
-        if (typeof dato === "string") {
-          li.textContent = dato;
-        } else {
-          li.textContent = [
-            dato.titulo || dato.nombre,
-            dato.nivel ? `(${dato.nivel})` : "",
-            dato.frecuencia ? `— ${dato.frecuencia}` : "",
-            dato.uso ? `— ${dato.uso}` : "",
-            dato.detalle || dato.por_que ? `: ${dato.detalle || dato.por_que}` : ""
-          ].filter(Boolean).join(" ");
-        }
-        ul.appendChild(li);
-      });
-
-      resultados.appendChild(ul);
-    }
-
-    function mostrarResultado(datos) {
-      resultados.replaceChildren();
-      resultados.style.display = "block";
-
-      if (datos.modo_demo) {
-        agregarTexto("p", "Resultado de demostración", "subtitulo");
-      }
-
-      if (datos.foto_valida === false) {
-        agregarTexto("h2", "No pudimos analizar esa foto");
-        agregarTexto("p", datos.motivo_foto_invalida);
-      } else {
-        agregarTexto("h2", datos.tipo_piel || "Orientación de tu piel");
-        agregarTexto("p", datos.resumen);
-        agregarTexto("p", datos.tema_principal, "subtitulo");
-        agregarLista("Aspectos positivos", datos.fortalezas);
-        agregarLista("Observaciones", datos.observaciones);
-        agregarLista("Tratamientos sugeridos", datos.tratamientos);
-
-        if (datos.plan) {
-          agregarTexto("h2", "Plan orientativo");
-          agregarTexto("p", datos.plan);
-        }
-
-        if (datos.opcion_premium) {
-          agregarTexto("h2", "Opción intensiva");
-          agregarTexto("p",
-            `${datos.opcion_premium.nombre} — ${datos.opcion_premium.frecuencia}. ${datos.opcion_premium.por_que}`);
-        }
-
-        agregarLista("Productos para casa", datos.productos);
-        agregarLista("Rutina de mañana", datos.rutina_manana);
-        agregarLista("Rutina de noche", datos.rutina_noche);
-      }
-
-      if (datos.consulta_medica) {
-        agregarTexto("h2", "Consulta profesional");
-        agregarTexto("p", datos.consulta_medica);
-      }
-
-      resultados.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
-
-    function leerBase64(archivo) {
-      return new Promise((resolve, reject) => {
-        const lector = new FileReader();
-        lector.onload = () => resolve(String(lector.result).split(",")[1]);
-        lector.onerror = () => reject(new Error("No se pudo leer la imagen."));
-        lector.readAsDataURL(archivo);
-      });
-    }
-
-    analizar.addEventListener("click", async () => {
-      mostrarEstado("");
-      resultados.style.display = "none";
-
-      if (!consentimiento.checked) {
-        mostrarEstado("Marcá la aceptación para continuar.", true);
-        return;
-      }
-
-      const texto = descripcion.value.trim();
-      if (!archivoElegido && !texto) {
-        mostrarEstado("Subí una foto o describí tu piel para continuar.", true);
-        return;
-      }
-
-      const cuerpo = { consentimiento: true };
-
-      try {
-        analizar.disabled = true;
-        analizar.textContent = "Analizando...";
-
-        if (archivoElegido) {
-          cuerpo.image_base64 = await leerBase64(archivoElegido);
-          cuerpo.media_type = archivoElegido.type || "image/jpeg";
-        } else {
-          cuerpo.descripcion = texto;
-        }
-
-        const respuesta = await fetch("/api/analyze", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(cuerpo)
-        });
-
-        const datos = await respuesta.json();
-        if (!respuesta.ok) throw new Error(datos.detail || "No se pudo completar el análisis.");
-
-        mostrarResultado(datos);
-        mostrarEstado("");
-        fetch("/api/event", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ tipo: "analisis", origen: "web" })
-        }).catch(() => {});
-      } catch (error) {
-        mostrarEstado(error.message || "Ocurrió un error. Probá de nuevo.", true);
-      } finally {
-        analizar.disabled = false;
-        analizar.textContent = "Analizar mi piel";
-      }
-    });
-
-    fetch("/api/catalog")
-      .then((r) => r.json())
-      .then((datos) => {
-        const numero = datos?.config?.whatsapp;
-        if (numero && numero !== "5491100000000") {
-          whatsapp.href = `https://wa.me/${numero}`;
-          whatsapp.classList.remove("oculto");
-        }
-      })
-      .catch(() => {});
-  </script>
+async function startCamera(){stopCamera();$("#camErr").style.display="none";if(!navigator.mediaDevices?.getUserMedia){$("#fileCapture").click();return;}show("s-camera");try{state.stream=await navigator.mediaDevices.getUserMedia({audio:false,video:{facingMode:{ideal:state.facing},width:{ideal:1920},height:{ideal:1440}}});$("#video").srcObject=state.stream;$("#camWrap").classList.toggle("back",state.facing!=="user");await $("#video").play();}catch(e){const m=e.name==="NotAllowedError"?"Necesitamos permiso para usar la cámara. Habilitalo en el navegador o subí una foto de tu galería.":"No pudimos abrir la cámara. Probá subiendo una foto de tu galería.";err(m,"#camErr");}}
+function stopCamera(){state.stream?.getTracks().forEach(t=>t.stop());state.stream=null;}
+$("#btnCamera").onclick=startCamera;$("#btnCamBack").onclick=()=>{stopCamera();show("s-home");};$("#btnFlip").onclick=()=>{state.facing=state.facing==="user"?"environment":"user";startCamera();};
+$("#btnShutter").onclick=()=>{const v=$("#video");if(!v.videoWidth)return;const c=document.createElement("canvas");c.width=v.videoWidth;c.height=v.videoHeight;const x=c.getContext("2d");if(state.facing==="user"){x.translate(c.width,0);x.scale(-1,1);}x.drawImage(v,0,0);stopCamera();setImage(c);};
+$("#btnUpload").onclick=()=>$("#fileInput").click();[$("#fileInput"),$("#fileCapture")].forEach(i=>i.addEventListener("change",()=>{const f=i.files?.[0];if(f)loadFile(f);i.value="";}));
+function loadFile(file){if(!file.type.startsWith("image/")){err("Ese archivo no es una imagen. Elegí un JPG o PNG.");return;}if(file.size>12*1024*1024){err("La imagen supera 12 MB. Elegí una foto más liviana.");return;}const im=new Image();im.onload=()=>{const c=document.createElement("canvas");c.width=im.naturalWidth;c.height=im.naturalHeight;c.getContext("2d").drawImage(im,0,0);URL.revokeObjectURL(im.src);setImage(c);};im.onerror=()=>err("No pudimos leer esa imagen. Probá con otra.");im.src=URL.createObjectURL(file);}
+function setImage(source){const max=1568,k=Math.min(1,max/Math.max(source.width,source.height));const c=document.createElement("canvas");c.width=Math.round(source.width*k);c.height=Math.round(source.height*k);c.getContext("2d").drawImage(source,0,0,c.width,c.height);state.image=c.toDataURL("image/jpeg",.88);state.mode="photo";$("#previewImg").src=state.image;show("s-preview");}
+$("#btnRetake").onclick=()=>show("s-home");$("#lnkShy").onclick=()=>show("s-describe");$("#btnDescBack").onclick=()=>show("s-home");$("#lnkToPhoto").onclick=()=>show("s-home");
+$("#btnAnalyze").onclick=()=>analyze("photo");$("#btnDescSend").onclick=()=>{const d=$("#descText").value.trim();if(d.length<15){err("Contanos un poco más para poder orientarte.");return;}state.description=d;analyze("text");};
+function setConsentError(){document.querySelectorAll(".consent").forEach(x=>x.classList.add("need"));err("Marcá la casilla de aceptación para continuar.");}
+async function analyze(mode){if(!state.consent){setConsentError();return;}state.mode=mode;$("#scan").innerHTML=mode==="photo"?`<img src="${state.image}" alt="">`:"";const lis=[...document.querySelectorAll("#steps li")];let step=0;lis.forEach(x=>x.className="");lis[0].className="now";clearInterval(state.stepTimer);state.stepTimer=setInterval(()=>{if(step<lis.length-1){lis[step].className="done";lis[++step].className="now";}},3500);$("#slowNote").classList.add("hidden");const slow=setTimeout(()=>$("#slowNote").classList.remove("hidden"),12000);show("s-loading");const body=mode==="photo"?{image_base64:state.image.split(",")[1],media_type:"image/jpeg",contexto:[...state.concerns].join(", "),consentimiento:true}:{descripcion:state.description,consentimiento:true};try{const r=await fetch("/api/analyze",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});const d=await r.json();if(!r.ok)throw new Error(d.detail||"No se pudo completar el análisis.");clearTimeout(slow);clearInterval(state.stepTimer);state.lastResult=d;track("analisis",mode);render(d);}catch(e){clearTimeout(slow);clearInterval(state.stepTimer);show(mode==="photo"?"s-preview":"s-describe");err(e.message||"Ocurrió un error. Probá de nuevo.");}}
+function listHtml(title,arr){if(!Array.isArray(arr)||!arr.length)return"";return`<div class="card"><h3>${esc(title)}</h3>${arr.map((a,i)=>{if(typeof a==="string")return`<div class="rec"><span class="num">${i+1}</span><div><p>${esc(a)}</p></div></div>`;const name=a.titulo||a.nombre||"";const detail=a.detalle||a.por_que||"";const meta=a.frecuencia||a.uso||"";const level=a.nivel?`<span class="lvl ${esc(a.nivel)}">${esc(a.nivel)}</span>`:"";const role=a.rol?`<span class="rol">${esc(a.rol==="principal"?"Principal":"Complementario")}</span>`:"";return`<div class="rec"><span class="num">${i+1}</span><div><b>${esc(name)} ${role} ${level}</b>${meta?`<div class="meta">${esc(meta)}</div>`:""}${detail?`<p>${esc(detail)}</p>`:""}</div></div>`;}).join("")}</div>`;}
+function makeWa(d){const c=state.cfg;const n=String(c.whatsapp||"").replace(/\D/g,"");const tr=(d.tratamientos||[]).map(x=>"• "+x.nombre).join("\n");const pr=(d.productos||[]).map(x=>"• "+x.nombre).join("\n");let m=`Hola ${c.nombre_profesional}! Usé la app de análisis de piel de ${c.marca}.`;if(d.tema_principal)m+=`\n\nMe gustaría consultar por: ${d.tema_principal}.`;if(tr)m+=`\n\nTratamientos sugeridos:\n${tr}`;if(pr)m+=`\n\nProductos sugeridos:\n${pr}`;m+="\n\n¿Me contás más y qué turnos tenés disponibles?";return`https://wa.me/${n}?text=${encodeURIComponent(m)}`;}
+function render(d){const result=$("#result");if(!d.foto_valida){result.innerHTML=`<div class="card"><h3>No pudimos analizar esa foto</h3><p>${esc(d.motivo_foto_invalida||"Probá con una foto clara, de frente y con buena luz.")}</p><button class="btn btn-primary" style="margin-top:14px" onclick="show('s-home')">Intentar otra vez</button></div>`;show("s-result");return;}const name=esc(state.cfg.nombre_profesional);const photo=state.mode==="photo"?`<img src="${state.image}" alt="Foto analizada">`:"";const obs=listHtml("Lo que observamos",d.observaciones);const trs=listHtml(`Tu plan de tratamientos con ${name}`,d.tratamientos);const prods=listHtml("Para tu rutina en casa",d.productos);const routine=(d.rutina_manana?.length||d.rutina_noche?.length)?`<div class="card"><h3>Rutina sugerida</h3><div class="routine"><div><h4>☀️ Mañana</h4><ol>${(d.rutina_manana||[]).map(x=>`<li>${esc(x)}</li>`).join("")}</ol></div><div><h4>🌙 Noche</h4><ol>${(d.rutina_noche||[]).map(x=>`<li>${esc(x)}</li>`).join("")}</ol></div></div></div>`:"";const premium=d.opcion_premium?`<div class="card premium"><h3>✨ Opción intensiva</h3><div class="rec"><span class="num">★</span><div><b>${esc(d.opcion_premium.nombre)}</b><div class="meta">${esc(d.opcion_premium.frecuencia||"")}</div><p>${esc(d.opcion_premium.por_que||"")}</p></div></div></div>`:"";const med=d.consulta_medica?`<div class="med">🩺 ${esc(d.consulta_medica)}</div>`:"";result.innerHTML=`${d.modo_demo?'<div class="demo">Modo de demostración: respuesta de ejemplo</div>':''}<div class="result-head">${photo}<div><h2>Tu lectura de piel</h2><span class="tag">${esc(d.tipo_piel||"Orientación cosmética")}</span></div></div><div class="card"><p>${esc(d.resumen||"")}</p>${d.tema_principal?`<p style="margin-top:8px"><b>Enfoque:</b> ${esc(d.tema_principal)}</p>`:""}${d.fortalezas?.length?`<div class="good">${d.fortalezas.map(x=>`<span>✓ ${esc(x)}</span>`).join("")}</div>`:""}</div>${med}${obs}${trs}${d.plan?`<div class="card"><div class="plan"><h4>Cómo seguir</h4><p>${esc(d.plan)}</p></div></div>`:""}${premium}${prods}${routine}<div class="card cta"><h3>¿Querés conversar sobre tu piel?</h3><p>Escribile a ${name} para consultar por los tratamientos y turnos.</p><a class="btn btn-wa" data-origin="resultado" href="${makeWa(d)}" target="_blank" rel="noopener">Consultar por WhatsApp</a></div><button class="restart" type="button" onclick="location.reload()">Hacer un nuevo análisis</button>`;$("#waSticky").href=makeWa(d);show("s-result");}
+$("#privacyLink").onclick=()=>$("#privacy").open=true;
+</script>
 </body>
 </html>
