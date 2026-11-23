@@ -166,6 +166,8 @@ export async function onRequestPost({ request, env }) {
 
     const apiKey = env.GEMINI_API_KEY;
 
+console.log("YCR diagnóstico", { clavePresente: Boolean(apiKey) });
+    
     if (!apiKey) {
       console.error("Falta configurar el secreto GEMINI_API_KEY en Cloudflare.");
 
