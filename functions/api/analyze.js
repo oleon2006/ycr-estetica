@@ -1,6 +1,6 @@
 import { CATALOGO_YCR } from "./catalog.js";
 
-const MODELO_PREDETERMINADO = "gemini-3.8-flash";
+const MODELO = "gemini-3.5-flash-lite";
 
 const AREAS_VALIDAS = new Set([
   "Manchas",
@@ -185,7 +185,7 @@ export async function onRequestPost({ request, env }) {
     });
   }
 
-  const modelo = env.GEMINI_MODEL?.trim() || MODELO_PREDETERMINADO;
+  const modelo = MODELO;
   const geminiUrl =
     `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(modelo)}:generateContent`;
 
